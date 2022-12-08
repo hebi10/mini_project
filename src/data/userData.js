@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1YL185M8lRdJuKAmWogX1TsO073Tily4",
@@ -12,20 +13,21 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
-// const storage = firebase.storage();
 
 db.collection("user")
   .get()
   .then((result) => {
     localStorage.clear();
     result.forEach((doc) => {
-      localStorage.setItem("user" + doc.data().id, JSON.stringify(doc.data()));
+      localStorage.setItem(doc.data().userName, JSON.stringify(doc.data()));
     });
   });
 
 export const userData = [];
 
 for (let i = 0; i < localStorage.length; i++) {
-  let user = JSON.parse(localStorage.getItem("user" + i));
+  let user = JSON.parse(localStorage.getItem(localStorage.key(i)));
   userData.push(user);
 }
+
+export const storage = firebase.storage();

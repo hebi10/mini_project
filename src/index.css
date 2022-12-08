@@ -48,8 +48,8 @@ li {
 }
 
 @media (min-width: 576px) {
-  .container,
-  .container-sm {
-    max-width: 90%;
+  .container-sm,
+  .cardList li {
+    max-width: 600px;
   }
 }

@@ -10,10 +10,10 @@ function Card({ item }) {
       <div className="card-body">
         <h5 className="card-title">
           {item.userName}
-          <span className="card-subtitle mb-2 text-muted">{item.date}</span>
+          <span className="card-subtitle mb-2 text-muted">{`${item.date}`}</span>
         </h5>
         <p className="card-text">{item.description}</p>
-        <Link to={`/detail/${item.id}`} className="card-link">
+        <Link to={`/detail/${item.uid}`} className="card-link">
           글 보러가기
         </Link>
       </div>
@@ -24,9 +24,9 @@ function Card({ item }) {
 function Homepage({ userText }) {
   return (
     <ul className="cardList">
-      {userText.map((item) => {
+      {userText.map((item, index) => {
         return (
-          <li key={item.id}>
+          <li key={index}>
             <Card item={item} />
           </li>
         );

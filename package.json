@@ -2,6 +2,7 @@
   "name": "mini_porject",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://sevim0104.cafe24.com/mini-notepad/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
