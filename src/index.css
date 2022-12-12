@@ -1,3 +1,8 @@
+#root > .container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .container a {
   color: white;
   text-decoration: none;

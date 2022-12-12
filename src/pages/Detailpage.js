@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { db, userData } from "../data/userData";
+import { db } from "../data/userData";
 import firebase from "firebase/app";
-
-const Btn = styled(Button)`
-  margin-right: 5px;
-`;
 
 function CardList({ list, user }) {
   const handleDelete = () => {
-    db.collection("memo")
-      .doc(user.uid)
-      .collection("memoText")
-      .doc(list.title)
-      .delete();
+    try {
+      db.collection("memo")
+        .doc(user.uid)
+        .collection("memoText")
+        .doc(list.title)
+        .delete()
+        .then(() => {
+          alert("삭제하였습니다.");
+          window.location.reload(true);
+        });
+    } catch (err) {
+      console.error(err);
+      alert("게시글은 작성자와 관리자만 삭제 가능합니다.");
+    }
   };
 
   // console.log(list);
