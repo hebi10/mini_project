@@ -4,19 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
 import styled from "styled-components";
-import images01 from "../images/bg01.jpg";
-import images02 from "../images/bg02.jpg";
-import images03 from "../images/bg03.jpg";
-import images04 from "../images/bg04.jpg";
-import images05 from "../images/bg05.jpg";
-
-const IMG = {
-  bg01: images01,
-  bg02: images02,
-  bg03: images03,
-  bg04: images04,
-  bg05: images05,
-};
 
 const url = {
   img01:
@@ -81,10 +68,16 @@ function CardList({ list, user, uid, navigate }) {
 
   const changeStart = () => {
     // onChange(item.id, changeText);
-    if (user.uid == uid) {
-      setChange(change ? false : true);
-    } else {
+
+    try {
+      if (user.uid == uid) {
+        setChange(change ? false : true);
+      } else {
+        alert("게시글은 작성자와 관리자만 수정 가능합니다.");
+      }
+    } catch (err) {
       alert("게시글은 작성자와 관리자만 수정 가능합니다.");
+      // console.error(err);
     }
   };
 
