@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db, storage } from "../data/userData";
+import { db } from "../data/userData";
 import firebase from "firebase/app";
 import styled from "styled-components";
 import images01 from "../images/bg01.jpg";
@@ -7,6 +7,7 @@ import images02 from "../images/bg02.jpg";
 import images03 from "../images/bg03.jpg";
 import images04 from "../images/bg04.jpg";
 import images05 from "../images/bg05.jpg";
+import { useNavigate } from "react-router-dom";
 
 const IMG = {
   bg01: images01,
@@ -68,37 +69,35 @@ const InputBox = styled.div`
   }
 `;
 
+const url = {
+  img01:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
+  img02:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg02.jpg?alt=media&token=097eaf6c-acf2-4927-8ed5-e6e47db8228f",
+  img03:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg03.jpg?alt=media&token=4c31e2ff-00e5-4df3-b5fc-2181cb1eff08",
+  img04:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg04.jpg?alt=media&token=0dd70d57-36cb-42a5-abdf-259353a7a002",
+  img05:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg05.jpg?alt=media&token=59ac1369-bba6-4f25-9ac3-5c01a606deeb",
+};
+
 function Upload() {
   const [userName, setUserName] = useState("게스트");
+  const [userUid, setUserUid] = useState();
+  let navigate = useNavigate();
   const [data, setData] = useState({
     title: "",
     text: "",
-    uid: firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.uid);
-      }
-    }),
     imgURL:
-      "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Falvan-nee-ZCHj_2lJP00-unsplash.jpg?alt=media&token=bc0fbf3c-3f06-43db-b10d-4792f06f5678",
-  });
-
-  const url = {
-    img01:
       "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
-    img02:
-      "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg02.jpg?alt=media&token=097eaf6c-acf2-4927-8ed5-e6e47db8228f",
-    img03:
-      "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg03.jpg?alt=media&token=4c31e2ff-00e5-4df3-b5fc-2181cb1eff08",
-    img04:
-      "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg04.jpg?alt=media&token=0dd70d57-36cb-42a5-abdf-259353a7a002",
-    img05:
-      "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg05.jpg?alt=media&token=59ac1369-bba6-4f25-9ac3-5c01a606deeb",
-  };
+  });
 
   useEffect(
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setUserName(user.displayName);
+        setUserUid(user.uid);
       }
     }),
     []
@@ -130,6 +129,7 @@ function Upload() {
       .set(data)
       .then(() => {
         alert("업로드 완료 되었습니다.");
+        navigate(`/detail/${userUid}`);
         window.location.reload(true);
       });
   };

@@ -7,9 +7,25 @@ import {
 } from "firebase/auth";
 import styled from "styled-components";
 import { db } from "../data/userData";
+import { useNavigate } from "react-router-dom";
 
 const Btn = styled.button`
   margin-right: 20px;
+`;
+
+const Fieldset = styled.fieldset`
+  border: 1px solid black;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  & legend {
+    margin-bottom: 15px;
+  }
+
+  & button {
+    margin-bottom: 10px;
+  }
 `;
 
 function Loginpage() {
@@ -20,11 +36,11 @@ function Loginpage() {
     description: "",
     uid: "",
   });
-
   const [user, setUser] = useState({
     email: "",
     pw: "",
   });
+  let navigate = useNavigate();
 
   const newLoginClick = () => {
     // console.log(newUser);
@@ -55,7 +71,7 @@ function Loginpage() {
           .doc("가입을 환영합니다.")
           .set({
             imgURL:
-              "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Falvan-nee-ZCHj_2lJP00-unsplash.jpg?alt=media&token=bc0fbf3c-3f06-43db-b10d-4792f06f5678",
+              "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
             title: "가입을 환영합니다.",
             text: "기능들을 시험해 보세요!",
           });
@@ -82,6 +98,7 @@ function Loginpage() {
       .then((result) => {
         // console.log(result.user);
         alert("로그인이 완료되었습니다.\n사용 후 로그아웃 부탁드립니다 :)");
+        navigate(`/`);
         window.location.reload(true);
       });
   };
@@ -110,7 +127,8 @@ function Loginpage() {
 
   return (
     <>
-      <div className="container mt-3">
+      <Fieldset className="container mt-3">
+        <legend>회원가입</legend>
         <div className="mb-3">
           <input
             type="text"
@@ -159,8 +177,9 @@ function Loginpage() {
         >
           가입하기
         </button>
-      </div>
-      <div className="container mt-3">
+      </Fieldset>
+      <Fieldset className="container mt-3">
+        <legend>로그인</legend>
         <div className="mb-3">
           <input
             type="email"
@@ -197,7 +216,7 @@ function Loginpage() {
         >
           로그아웃 하기
         </button>
-      </div>
+      </Fieldset>
     </>
   );
 }
