@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import App from "./components/App";
 import Detailpage from "./pages/Detailpage";
@@ -7,6 +7,7 @@ import Uploadpage from "./pages/Uploadpage";
 import Loginpage from "./pages/Loginpage";
 import { userData } from "./data/userData";
 import styled from "styled-components";
+import Mypage from "./pages/Mypage";
 
 // console.log(userData);
 const Div = styled.div`
@@ -16,7 +17,11 @@ const Div = styled.div`
 `;
 
 function Main() {
-  const [userText] = useState(userData);
+  const [userText, setUserText] = useState(userData);
+
+  useEffect(() => {
+    setUserText(userData);
+  }, []);
 
   return (
     <HashRouter>
@@ -26,6 +31,7 @@ function Main() {
           <Route path={`/detail/:uid`} element={<Detailpage />} />
           <Route path="/upload" element={<Uploadpage />} />
           <Route path="/login" element={<Loginpage />} />
+          <Route path={`/mypage/:uid`} element={<Mypage />} />
           <Route
             path="*"
             element={<Div>홈을 눌러 메인 페이지로 이동하세요.</Div>}

@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
 import styled from "styled-components";
-import images01 from "../images/bg01.jpg";
-import images02 from "../images/bg02.jpg";
-import images03 from "../images/bg03.jpg";
-import images04 from "../images/bg04.jpg";
-import images05 from "../images/bg05.jpg";
 import { useNavigate } from "react-router-dom";
 
-const IMG = {
-  bg01: images01,
-  bg02: images02,
-  bg03: images03,
-  bg04: images04,
-  bg05: images05,
+const url = {
+  img01:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
+  img02:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg02.jpg?alt=media&token=097eaf6c-acf2-4927-8ed5-e6e47db8228f",
+  img03:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg03.jpg?alt=media&token=4c31e2ff-00e5-4df3-b5fc-2181cb1eff08",
+  img04:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg04.jpg?alt=media&token=0dd70d57-36cb-42a5-abdf-259353a7a002",
+  img05:
+    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg05.jpg?alt=media&token=59ac1369-bba6-4f25-9ac3-5c01a606deeb",
 };
 
 const H2 = styled.h2`
@@ -53,34 +53,23 @@ const InputBox = styled.div`
   }
 
   & label:nth-of-type(1) {
-    background: url(${IMG.bg01}) no-repeat center / contain;
+    background: url(${url.img01}) no-repeat center / contain;
   }
   & label:nth-of-type(2) {
-    background: url(${IMG.bg02}) no-repeat center / contain;
+    background: url(${url.img02}) no-repeat center / contain;
   }
   & label:nth-of-type(3) {
-    background: url(${IMG.bg03}) no-repeat center / contain;
+    background: url(${url.img03}) no-repeat center / contain;
   }
   & label:nth-of-type(4) {
-    background: url(${IMG.bg04}) no-repeat center / contain;
+    background: url(${url.img04}) no-repeat center / contain;
   }
   & label:nth-of-type(5) {
-    background: url(${IMG.bg05}) no-repeat center / contain;
+    background: url(${url.img05}) no-repeat center / contain;
   }
 `;
 
-const url = {
-  img01:
-    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
-  img02:
-    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg02.jpg?alt=media&token=097eaf6c-acf2-4927-8ed5-e6e47db8228f",
-  img03:
-    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg03.jpg?alt=media&token=4c31e2ff-00e5-4df3-b5fc-2181cb1eff08",
-  img04:
-    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg04.jpg?alt=media&token=0dd70d57-36cb-42a5-abdf-259353a7a002",
-  img05:
-    "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg05.jpg?alt=media&token=59ac1369-bba6-4f25-9ac3-5c01a606deeb",
-};
+let today = new Date();
 
 function Upload() {
   const [userName, setUserName] = useState("게스트");
@@ -91,6 +80,12 @@ function Upload() {
     text: "",
     imgURL:
       "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
+    date: `
+      ${today.getFullYear()}
+      .${today.getMonth() + 1}
+      .${today.getDate()}
+      .${today.toLocaleTimeString("ko-kr")}
+      `,
   });
 
   useEffect(
@@ -121,8 +116,9 @@ function Upload() {
     }));
   };
 
-  const upload = () => {
-    db.collection("memo")
+  const upload = async () => {
+    await db
+      .collection("memo")
       .doc(JSON.parse(localStorage.getItem(userName)).uid)
       .collection("memoText")
       .doc(data.title)
@@ -130,8 +126,13 @@ function Upload() {
       .then(() => {
         alert("업로드 완료 되었습니다.");
         navigate(`/detail/${userUid}`);
-        window.location.reload(true);
+      })
+      .catch((err) => {
+        alert("로그인 후 이용 가능합니다.");
+        navigate(`/login`);
+        console.log(err);
       });
+    await window.location.reload(true);
   };
 
   return (

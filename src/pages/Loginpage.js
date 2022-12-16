@@ -74,6 +74,12 @@ function Loginpage() {
               "https://firebasestorage.googleapis.com/v0/b/with-react-a047a.appspot.com/o/image%2Fbg01.jpg?alt=media&token=403e8795-88de-4929-9c40-ef111bd5e19c",
             title: "가입을 환영합니다.",
             text: "기능들을 시험해 보세요!",
+            date: `
+            ${today.getFullYear()}
+            .${today.getMonth() + 1}
+            .${today.getDate()}
+            .${today.toLocaleTimeString("ko-kr")}
+            `,
           });
 
         db.collection("memo").doc(result.user.uid).set({
@@ -87,20 +93,21 @@ function Loginpage() {
       });
   };
 
-  const loginClick = () => {
+  const loginClick = async () => {
     // console.log(user);
     let email = user.email;
     let password = user.pw;
 
-    firebase
+    await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         // console.log(result.user);
         alert("로그인이 완료되었습니다.\n사용 후 로그아웃 부탁드립니다 :)");
         navigate(`/`);
-        window.location.reload(true);
       });
+
+    await window.location.reload(true);
   };
 
   const logOut = () => {
