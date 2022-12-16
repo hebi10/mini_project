@@ -34,15 +34,17 @@ function Detailpage() {
   useEffect(textPull, []);
 
   return (
-    <ul className="cardFlex">
-      {text.map((list, index) => {
-        return (
-          <li key={index}>
-            <CardList list={list} user={user} uid={uid} navigate={navigate} />
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <ul className="cardFlex">
+        {text.map((list, index) => {
+          return (
+            <li key={index}>
+              <CardList list={list} user={user} uid={uid} navigate={navigate} />
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 

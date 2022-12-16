@@ -55,7 +55,7 @@ function Navber() {
       setUserName(user.displayName);
       setUserUid(user.uid);
     } else {
-      document.querySelector(".displaynone").style.display = "none";
+      document.querySelector(".login").style.display = "none";
     }
   });
 
@@ -81,15 +81,13 @@ function Navber() {
         <Span>
           <h5>{userName}</h5>
           <ul>
-            {userUid || (
-              <li
-                onClick={() => {
-                  navigate(`/mypage/${userUid}`);
-                }}
-              >
-                내 정보
-              </li>
-            )}
+            <li
+              onClick={() => {
+                navigate(`/mypage/${userUid}`);
+              }}
+            >
+              내 정보
+            </li>
             <li onClick={logOut}>로그아웃</li>
           </ul>
         </Span>
