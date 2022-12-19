@@ -115,7 +115,7 @@ function Navber() {
                   navigate(`/mypage/${userUid}`);
                 }}
               >
-                내 정보
+                마이페이지
               </li>
               <li onClick={logOut}>로그아웃</li>
             </ul>

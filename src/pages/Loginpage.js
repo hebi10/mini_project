@@ -67,6 +67,9 @@ function Loginpage() {
         // console.log(result.user);
         alert("로그인이 완료되었습니다.\n사용 후 로그아웃 부탁드립니다 :)");
         navigate(`/`);
+      })
+      .catch(() => {
+        alert("아이디 비밀번호가 맞는지, 로그아웃이 되었는지 확인해주세요.");
       });
 
     await window.location.reload(true);
