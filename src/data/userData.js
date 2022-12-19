@@ -25,9 +25,11 @@ db.collection("user")
 
 export const userData = [];
 
-for (let i = 0; i < localStorage.length; i++) {
-  let user = JSON.parse(localStorage.getItem(localStorage.key(i)));
-  userData.push(user);
+export async function dataLoad() {
+  for (let i = 0; i < localStorage.length; i++) {
+    let user = JSON.parse(localStorage.getItem(localStorage.key(i)));
+    userData.push(user);
+  }
 }
 
 export const storage = firebase.storage();

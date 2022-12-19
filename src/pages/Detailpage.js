@@ -8,14 +8,15 @@ function Detailpage() {
   const [text, setText] = useState([]);
   const [user, setUser] = useState();
   let navigate = useNavigate();
-
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      setUser(user);
-    }
-  });
-
   let { uid } = useParams();
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((data) => {
+      if (data) {
+        setUser(data);
+      }
+    });
+  }, []);
 
   const textPull = () => {
     db.collection("memo")
@@ -34,17 +35,15 @@ function Detailpage() {
   useEffect(textPull, []);
 
   return (
-    <>
-      <ul className="cardFlex">
-        {text.map((list, index) => {
-          return (
-            <li key={index}>
-              <CardList list={list} user={user} uid={uid} navigate={navigate} />
-            </li>
-          );
-        })}
-      </ul>
-    </>
+    <ul className="cardFlex">
+      {text.map((list, index) => {
+        return (
+          <li key={index}>
+            <CardList list={list} user={user} uid={uid} navigate={navigate} />
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

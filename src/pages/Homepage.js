@@ -1,3 +1,4 @@
+import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const cardStyle = {
@@ -22,8 +23,19 @@ function Card({ item }) {
 }
 
 function Homepage({ userText }) {
+  const onload = () => {
+    window.location.reload(true);
+  };
+
   return (
     <ul className="cardList">
+      <li>
+        <div className="d-grid gap-2">
+          <Button variant="primary" size="lg" onClick={onload}>
+            사용자 목록 새로고침
+          </Button>
+        </div>
+      </li>
       {userText.map((item, index) => {
         return (
           <li key={index}>

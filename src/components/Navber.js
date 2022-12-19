@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import firebase from "firebase/app";
 import styled from "styled-components";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const Span = styled.span`
   float: right;
@@ -47,22 +48,29 @@ const Span = styled.span`
 function Navber() {
   const [userName, setUserName] = useState("게스트");
   const [userUid, setUserUid] = useState(null);
+  const [login, setLogin] = useState(false);
   let navigate = useNavigate();
 
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      console.log(user);
-      setUserName(user.displayName);
-      setUserUid(user.uid);
-    } else {
-      document.querySelector(".login").style.display = "none";
-    }
-  });
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user);
+        setUserName(user.displayName);
+        setUserUid(user.uid);
+        setLogin(true);
+      }
+    });
+  }, []);
 
-  const logOut = () => {
-    firebase.auth().signOut();
-    alert("로그아웃이 완료되었습니다.");
-    window.location.reload(true);
+  const logOut = async () => {
+    if (login) {
+      await firebase.auth().signOut();
+      await alert("로그아웃이 완료되었습니다.");
+      await window.location.reload(true);
+    } else {
+      alert("로그인 후 이용 바랍니다.");
+      await window.location.reload(true);
+    }
   };
 
   return (
@@ -74,22 +82,44 @@ function Navber() {
         <Nav className="me-auto">
           <Link to="/">Home</Link>
           <Link to="/login">Login</Link>
-          <Link to="/upload" className="login">
-            Upload
-          </Link>
+          {login && (
+            <Link to="/upload" className="login">
+              Upload
+            </Link>
+          )}
         </Nav>
         <Span>
           <h5>{userName}</h5>
-          <ul>
-            <li
-              onClick={() => {
-                navigate(`/mypage/${userUid}`);
-              }}
-            >
-              내 정보
-            </li>
-            <li onClick={logOut}>로그아웃</li>
-          </ul>
+          {login || (
+            <ul>
+              <li
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                로그인
+              </li>
+              <li
+                onClick={() => {
+                  navigate("/sign");
+                }}
+              >
+                회원가입
+              </li>
+            </ul>
+          )}
+          {login && (
+            <ul>
+              <li
+                onClick={() => {
+                  navigate(`/mypage/${userUid}`);
+                }}
+              >
+                내 정보
+              </li>
+              <li onClick={logOut}>로그아웃</li>
+            </ul>
+          )}
         </Span>
       </Container>
     </Nbar>

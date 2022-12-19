@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import firebase from "firebase/app";
 import styled from "styled-components";
 
 const H2 = styled.h2`
@@ -43,6 +45,16 @@ const Ul = styled.ul`
 `;
 
 function Mypage() {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((data) => {
+      if (data) {
+        setUser(data);
+      }
+    });
+  }, []);
+
   return (
     <>
       <H2>제작 중입니다. 기능이 작동을 안 할 수 있습니다.</H2>
