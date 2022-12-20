@@ -33,3 +33,17 @@ export async function dataLoad() {
 }
 
 export const storage = firebase.storage();
+
+// 로그인 정보
+
+export let userInpo;
+
+// firebase.auth().onAuthStateChanged((user) => {
+//   if (user) {
+//     userInpo = {
+//       displayName: user.displayName,
+//       uid: user.uid,
+//     };
+//     console.log(userInpo);
+//   }
+// });

@@ -50,7 +50,7 @@ function Detailpage() {
 
   return (
     <>
-      <H2>{userName}님의 마이페이지</H2>
+      <H2>{userName}님의 메모장</H2>
       <ul className="cardFlex">
         {text.map((list, index) => {
           return (

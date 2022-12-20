@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
 import styled from "styled-components";
@@ -88,16 +88,6 @@ function Upload() {
       `,
   });
 
-  useEffect(
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.displayName);
-        setUserUid(user.uid);
-      }
-    }),
-    []
-  );
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     setData((prevValues) => ({
@@ -117,6 +107,14 @@ function Upload() {
   };
 
   const upload = async () => {
+    await firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUserName(user.displayName);
+        setUserUid(user.uid);
+        console.log(userUid);
+      }
+    });
+
     await db
       .collection("memo")
       .doc(JSON.parse(localStorage.getItem(userName)).uid)
@@ -132,6 +130,7 @@ function Upload() {
         navigate(`/login`);
         console.log(err);
       });
+
     await window.location.reload(true);
   };
 
