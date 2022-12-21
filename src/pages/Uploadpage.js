@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
 import styled from "styled-components";
@@ -72,8 +72,8 @@ const InputBox = styled.div`
 let today = new Date();
 
 function Upload() {
-  const [userName, setUserName] = useState("게스트");
-  const [userUid, setUserUid] = useState();
+  let userName = useRef("게스트");
+  let userUid = useRef(null);
   let navigate = useNavigate();
   const [data, setData] = useState({
     title: "",
@@ -86,6 +86,13 @@ function Upload() {
       .${today.getDate()}
       .${today.toLocaleTimeString("ko-kr")}
       `,
+  });
+
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      userName = user.displayName;
+      userUid = user.uid;
+    }
   });
 
   const handleChange = (e) => {
@@ -107,14 +114,6 @@ function Upload() {
   };
 
   const upload = async () => {
-    await firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.displayName);
-        setUserUid(user.uid);
-        console.log(userUid);
-      }
-    });
-
     await db
       .collection("memo")
       .doc(JSON.parse(localStorage.getItem(userName)).uid)
