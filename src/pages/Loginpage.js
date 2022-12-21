@@ -97,7 +97,7 @@ function Loginpage() {
   return (
     <>
       <Card>
-        <Card.Header>테스트용 아이디입니다.</Card.Header>
+        <Card.Header>테스트용계정 아이디입니다.</Card.Header>
         <Card.Body>
           <blockquote className="blockquote mb-0">
             <p>
@@ -106,7 +106,11 @@ function Loginpage() {
               비밀번호: 123456
             </p>
             <Footer className="blockquote-footer">
-              <a href="https://github.com/hebi10/mini_project" target="_blank">
+              <a
+                href="https://github.com/hebi10/mini_project"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 github 바로가기 &#40;코드 보기&#41;
               </a>
             </Footer>
