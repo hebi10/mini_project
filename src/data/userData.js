@@ -3,12 +3,7 @@ import "firebase/firestore";
 import "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA1YL185M8lRdJuKAmWogX1TsO073Tily4",
-  authDomain: "with-react-a047a.firebaseapp.com",
-  projectId: "with-react-a047a",
-  storageBucket: "with-react-a047a.appspot.com",
-  messagingSenderId: "342844357085",
-  appId: "1:342844357085:web:cad66f8621e6ae1a711e34",
+  // 보안상 비공개 코드 입니다.
 };
 
 firebase.initializeApp(firebaseConfig);
