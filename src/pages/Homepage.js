@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -32,10 +31,6 @@ function Card({ item }) {
 }
 
 function Homepage({ userText }) {
-  const onload = () => {
-    window.location.reload(true);
-  };
-
   console.log(userText);
 
   return (
