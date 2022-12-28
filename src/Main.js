@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { userData, dataLoad } from "./data/userData";
+import { dataLoad } from "./data/userData";
 import App from "./components/App";
 import Detailpage from "./pages/Detailpage";
 import Homepage from "./pages/Homepage";
@@ -20,13 +20,9 @@ const Div = styled.div`
 function Main() {
   const [userText, setUserText] = useState([]);
 
-  const handleLoad = async () => {
-    await dataLoad();
-    await setUserText(userData);
-  };
-
   useEffect(() => {
-    handleLoad();
+    const userData = dataLoad();
+    setUserText(userData);
   }, []);
 
   return (

@@ -36,15 +36,10 @@ function Homepage({ userText }) {
     window.location.reload(true);
   };
 
+  console.log(userText);
+
   return (
     <ul className="cardList">
-      <li>
-        <div className="d-grid gap-2">
-          <Button variant="primary" size="lg" onClick={onload}>
-            사용자 목록 새로고침
-          </Button>
-        </div>
-      </li>
       {userText.map((item, index) => {
         return (
           <li key={index}>
