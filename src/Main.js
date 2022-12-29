@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { dataLoad } from "./data/userData";
+import { userDataLoad, dataLoad } from "./data/userData";
 import App from "./components/App";
 import Detailpage from "./pages/Detailpage";
 import Homepage from "./pages/Homepage";
@@ -9,6 +9,7 @@ import Loginpage from "./pages/Loginpage";
 import Mypage from "./pages/Mypage";
 import Signuppage from "./pages/Signuppage";
 import styled from "styled-components";
+import Chatroom from "./pages/Chatroompage";
 
 // console.log(userData);
 const Div = styled.div`
@@ -21,8 +22,10 @@ function Main() {
   const [userText, setUserText] = useState([]);
 
   useEffect(() => {
-    const userData = dataLoad();
-    setUserText(userData);
+    (async function () {
+      await userDataLoad();
+      await setUserText(dataLoad());
+    })();
   }, []);
 
   return (
@@ -32,6 +35,7 @@ function Main() {
           <Route index element={<Homepage userText={userText} />} />
           <Route path={`/detail/:uid`} element={<Detailpage />} />
           <Route path="/upload" element={<Uploadpage />} />
+          <Route path="/chatroom/:uid" element={<Chatroom />} />
           <Route path="/login" element={<Loginpage />} />
           <Route path="/sign" element={<Signuppage />} />
           <Route path={`/mypage/:uid`} element={<Mypage />} />

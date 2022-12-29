@@ -55,7 +55,24 @@ function Loginpage() {
     });
   }, []);
 
+  const signClick = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        alert("로그인이 되어있습니다! 로그아웃 이후 사용 가능합니다.");
+      } else {
+        navigate("/sign");
+      }
+    });
+  };
+
   const loginClick = async () => {
+    await firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        alert("로그인이 되어있습니다! 로그아웃 이후 사용 가능합니다.");
+        return;
+      }
+    });
+
     // console.log(user);
     let email = user.email;
     let password = user.pw;
@@ -139,13 +156,8 @@ function Loginpage() {
             value={user.pw}
           />
         </div>
-        <Btn01
-          onClick={loginClick}
-          type="submit"
-          className="btn btn-primary"
-          id="login"
-        >
-          로그인 하기
+        <Btn01 onClick={signClick} type="submit" className="btn btn-primary">
+          회원가입
         </Btn01>
         <Btn02
           onClick={logOut}
@@ -156,14 +168,8 @@ function Loginpage() {
           로그아웃 하기
         </Btn02>
         <div className="d-grid gap-2">
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => {
-              navigate("/sign");
-            }}
-          >
-            회원가입
+          <Button onClick={loginClick} variant="secondary" size="lg" id="login">
+            로그인 하기
           </Button>
         </div>
       </Fieldset>

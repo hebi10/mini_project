@@ -53,12 +53,14 @@ function Signuppage() {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then(async (result) => {
         let today = new Date();
         console.log(result);
-        result.user.updateProfile({ displayName: newUser.nameNew });
-        db.collection("user")
-          .doc(newUser.nameNew)
+        await result.user.updateProfile({ displayName: newUser.nameNew });
+
+        await db
+          .collection("user")
+          .doc(result.user.uid)
           .set({
             description: newUser.description,
             userName: newUser.nameNew,
@@ -68,7 +70,8 @@ function Signuppage() {
             }.${today.getDate()}`,
           });
 
-        db.collection("memo")
+        await db
+          .collection("memo")
           .doc(result.user.uid)
           .collection("memoText")
           .doc("가입을 환영합니다.")
@@ -85,7 +88,8 @@ function Signuppage() {
             `,
           });
 
-        db.collection("memo")
+        await db
+          .collection("memo")
           .doc(result.user.uid)
           .set({
             userName: newUser.nameNew,
@@ -96,9 +100,10 @@ function Signuppage() {
             myMemo: "0",
           });
 
-        alert("가입이 완료 되었습니다! 로그인 후 이용해주세요 :)");
+        await alert("가입이 완료 되었습니다 :)");
 
-        navigate("/login");
+        await navigate("/login");
+        await window.location.reload(true);
       })
       .catch(() => {
         alert("이메일 형식에 맞는지\n비밀번호가 6자리 넘는지 확인해주세요.");

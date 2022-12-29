@@ -1,5 +1,9 @@
+import { useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { db } from "../data/userData";
+import firebase from "firebase/app";
 
 const cardStyle = {
   display: "width: 18rem",
@@ -13,7 +17,18 @@ const H5 = styled.h5`
   font-size: 1.1rem;
 `;
 
-function Card({ item }) {
+function Card({ item, userUid }) {
+  const handleChatroom = () => {
+    let data = {
+      who: [userUid, item.uid],
+      user: item.userName,
+      userUid: item.uid,
+      date: new Date(),
+    };
+
+    db.collection("chatroom").doc(item.uid).set(data);
+  };
+
   return (
     <div className="card" style={cardStyle}>
       <div className="card-body">
@@ -25,20 +40,35 @@ function Card({ item }) {
         <Link to={`/detail/${item.uid}`} className="card-link">
           글 보러가기
         </Link>
+        <Link
+          onClick={handleChatroom}
+          to={`/chatroom/${item.uid}`}
+          className="card-link"
+        >
+          글쓴이와 채팅하기
+        </Link>
       </div>
     </div>
   );
 }
 
 function Homepage({ userText }) {
-  console.log(userText);
+  const [userUid, setUserUid] = useState(null);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUserUid(user.uid);
+      }
+    });
+  }, []);
 
   return (
     <ul className="cardList">
       {userText.map((item, index) => {
         return (
           <li key={index}>
-            <Card item={item} />
+            <Card item={item} userUid={userUid} />
           </li>
         );
       })}

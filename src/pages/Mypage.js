@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import firebase from "firebase/app";
 import styled from "styled-components";
 import { db } from "../data/userData";
 import { useParams } from "react-router-dom";
@@ -47,7 +46,6 @@ const Ul = styled.ul`
 `;
 
 function Mypage() {
-  const [user, setUser] = useState();
   const [userName, setUserName] = useState();
   const [myMemo, setMyMemo] = useState();
   const [recommend, setRecommend] = useState();
@@ -55,12 +53,6 @@ function Mypage() {
   let { uid } = useParams();
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((data) => {
-      if (data) {
-        setUser(data);
-      }
-    });
-
     db.collection("memo")
       .doc(uid)
       .get()

@@ -14,14 +14,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 export const db = firebase.firestore();
 
-db.collection("user")
-  .get()
-  .then((result) => {
+export async function userDataLoad() {
+  await db.collection("user").onSnapshot((result) => {
     localStorage.clear();
     result.forEach((doc) => {
       localStorage.setItem(doc.data().userName, JSON.stringify(doc.data()));
     });
   });
+}
 
 export function dataLoad() {
   let userData = [];
@@ -30,10 +30,7 @@ export function dataLoad() {
     let user = JSON.parse(localStorage.getItem(localStorage.key(i)));
     userData.push(user);
   }
-
   return userData;
 }
 
 export const storage = firebase.storage();
-
-export let userInpo;

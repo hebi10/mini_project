@@ -82,6 +82,8 @@ function Navber() {
         <Nav className="me-auto">
           <Link to="/">Home</Link>
           <Link to="/login">Login</Link>
+          {login || <Link to="/sign">SignUp</Link>}
+
           {login && (
             <Link to="/upload" className="login">
               Upload
