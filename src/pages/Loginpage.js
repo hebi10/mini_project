@@ -66,14 +66,6 @@ function Loginpage() {
   };
 
   const loginClick = async () => {
-    await firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        alert("로그인이 되어있습니다! 로그아웃 이후 사용 가능합니다.");
-        return;
-      }
-    });
-
-    // console.log(user);
     let email = user.email;
     let password = user.pw;
 

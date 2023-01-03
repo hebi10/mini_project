@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import firebase from "firebase/app";
 import { db } from "../data/userData";
 import styled from "styled-components";
@@ -27,13 +27,11 @@ const Room = styled.div`
   }
 
   ol {
-    padding: 0;
+    padding: 0 0 70px;
+    box-sizing: border-box;
     margin: 0;
     height: 50vh;
     overflow-y: scroll;
-  }
-
-  ol li {
   }
 
   ol li strong {
@@ -73,6 +71,10 @@ const H2 = styled.h2`
   padding: 50px 0 30px;
 `;
 
+const Text = styled.p`
+  text-align: center;
+`;
+
 function Chatroom() {
   const [userUid, setUserUid] = useState(null);
   const [userName, setUserName] = useState("게스트");
@@ -81,24 +83,46 @@ function Chatroom() {
   const [chatList, setChatList] = useState([]);
   const [userList, setUserList] = useState([]);
   const listRef = useRef();
-  let { uid } = useParams();
+  const { uid } = useParams();
   const [params, setParams] = useState(uid);
+  const chatBoxRef = useRef();
 
   useEffect(() => {
-    async function effect() {
-      await chatStart();
-      await firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          setUserUid(user.uid);
-          setUserName(user.displayName);
-        }
-      });
+    console.log("무한 반복 확인");
+    loginUid();
+    listUpdate();
+    userRoomName();
+    chatListUpdate();
+    chatScroll();
+    chatStart();
+  }, [params, userUid]);
+
+  useEffect(() => {
+    chatScroll();
+  }, [userList]);
+
+  const loginUid = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUserUid(user.uid);
+        setUserName(user.displayName);
+      }
+    });
+  };
+
+  const chatScroll = () => {
+    let clientHeight = chatBoxRef.current.clientHeight;
+    let scrollHeight = chatBoxRef.current.scrollHeight;
+    let eh = chatBoxRef.current.clientHeight + chatBoxRef.current.scrollTop;
+
+    if (clientHeight <= eh) {
+      chatBoxRef.current.scrollTop = scrollHeight;
     }
-    effect();
-  }, [userUid]);
+  };
 
-  useEffect(() => {
-    db.collection("chatroom")
+  const chatListUpdate = useCallback(async () => {
+    await db
+      .collection("chatroom")
       .doc(params)
       .collection("messages")
       .orderBy("date")
@@ -106,18 +130,20 @@ function Chatroom() {
         let list = [];
 
         result.forEach((a) => {
-          let listFilter;
-          listFilter = chatList.some((list) => {
-            return a.data().uid == userUid;
+          list.push({
+            data: a.data(),
+            myChat() {
+              chatList.some((list) => {
+                return a.data().uid === userUid;
+              });
+            },
           });
-          list.push({ data: a.data(), myChat: listFilter });
         });
         setChatList(list);
       });
 
-    listUpdate();
-    userRoomName();
-  }, [params]);
+    await chatScroll();
+  }, []);
 
   const userRoomName = () => {
     db.collection("memo")
@@ -166,6 +192,7 @@ function Chatroom() {
         db.collection("chatroom").doc(params).collection("messages").add(data);
 
         setChat("");
+        chatScroll();
       } else {
         alert("로그인 후 사용 가능합니다.");
       }
@@ -194,10 +221,11 @@ function Chatroom() {
         result.forEach((a) => {
           let listFilter;
           listFilter = chatList.some((list) => {
-            return a.data().uid == userUid;
+            return a.data().uid === userName;
           });
           list.push({ data: a.data(), myChat: listFilter });
         });
+        console.log(list);
         setChatList(list);
       });
   };
@@ -205,6 +233,10 @@ function Chatroom() {
   return (
     <>
       <H2>{target}님과의 채팅방</H2>
+      <Text>
+        정렬에 오류가 있습니다.
+        <br /> 채팅방을 한번 클릭하면 정렬이 됩니다.
+      </Text>
       <Room>
         <ul ref={listRef} className="listName">
           {userList.map((list, i) => {
@@ -221,7 +253,7 @@ function Chatroom() {
           })}
         </ul>
         <div>
-          <ol>
+          <ol ref={chatBoxRef}>
             {chatList.map((list, i) => {
               return (
                 <li key={i} className={list.myChat ? "myChat" : "yourChat"}>
