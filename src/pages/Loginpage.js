@@ -73,7 +73,6 @@ function Loginpage() {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        // console.log(result.user);
         alert("로그인이 완료되었습니다.\n사용 후 로그아웃 부탁드립니다 :)");
         navigate(`/`);
       })

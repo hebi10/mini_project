@@ -46,7 +46,6 @@ function Signuppage() {
     }));
   };
   const newLoginClick = () => {
-    // console.log(newUser);
     let email = newUser.emailNew;
     let password = newUser.pwNew;
 
@@ -102,11 +101,13 @@ function Signuppage() {
 
         await alert("가입이 완료 되었습니다 :)");
 
-        await navigate("/login");
+        await navigate("/");
         await window.location.reload(true);
       })
       .catch(() => {
-        alert("이메일 형식에 맞는지\n비밀번호가 6자리 넘는지 확인해주세요.");
+        alert(
+          "이메일 형식에 맞는지\n비밀번호가 6자리 넘는지 확인해주세요.\n아이디가 중복일 가능성도 있습니다."
+        );
       });
   };
 

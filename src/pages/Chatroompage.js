@@ -226,9 +226,9 @@ function Chatroom({ myUid }) {
 
   return (
     <>
-      <H2>{target}님과의 채팅방</H2>
+      <H2>{target}님의 오픈채팅방</H2>
       <Text>
-        정렬에 오류가 있을시
+        전체 공유 채팅방입니다.
         <br /> 채팅방을 한번 클릭하면 정렬이 됩니다.
       </Text>
       <Room>

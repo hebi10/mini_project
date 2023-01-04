@@ -4,10 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
+import { Button } from "react-bootstrap";
 
 const cardStyle = {
   display: "width: 18rem",
 };
+
+const Btn = styled(Button)`
+  max-width: 800px;
+  width: 90%;
+  margin: 20px auto 0;
+`;
 
 const H5 = styled.h5`
   & strong {
@@ -48,8 +55,9 @@ function Card({ item, userUid, navigate }) {
         <Link to={`/detail/${item.uid}`} className="card-link">
           글 보러가기
         </Link>
+        <br />
         <Link onClick={handleChatroom} className="card-link">
-          글쓴이와 채팅하기
+          {item.userName}님 오픈채팅방 으로 이동하기
         </Link>
       </div>
     </div>
@@ -69,15 +77,28 @@ function Homepage({ userText }) {
   }, []);
 
   return (
-    <ul className="cardList">
-      {userText.map((item, index) => {
-        return (
-          <li key={index}>
-            <Card item={item} userUid={userUid} navigate={navigate} />
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      <div className="d-grid gap-2">
+        <Btn
+          variant="primary"
+          size="lg"
+          onClick={() => {
+            window.location.reload(true);
+          }}
+        >
+          최신글 불러오기
+        </Btn>
+      </div>
+      <ul className="cardList">
+        {userText.map((item, index) => {
+          return (
+            <li key={index}>
+              <Card item={item} userUid={userUid} navigate={navigate} />
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 
