@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
@@ -17,16 +17,24 @@ const H5 = styled.h5`
   font-size: 1.1rem;
 `;
 
-function Card({ item, userUid }) {
+function Card({ item, userUid, navigate }) {
   const handleChatroom = () => {
-    let data = {
-      who: [userUid, item.uid],
-      user: item.userName,
-      userUid: item.uid,
-      date: new Date(),
-    };
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        let data = {
+          who: [userUid, item.uid],
+          user: item.userName,
+          userUid: item.uid,
+          date: new Date(),
+        };
 
-    db.collection("chatroom").doc(item.uid).set(data);
+        db.collection("chatroom").doc(item.uid).set(data);
+
+        navigate(`/chatroom/${item.uid}`);
+      } else {
+        alert("로그인 후 이용 가능합니다.");
+      }
+    });
   };
 
   return (
@@ -40,11 +48,7 @@ function Card({ item, userUid }) {
         <Link to={`/detail/${item.uid}`} className="card-link">
           글 보러가기
         </Link>
-        <Link
-          onClick={handleChatroom}
-          to={`/chatroom/${item.uid}`}
-          className="card-link"
-        >
+        <Link onClick={handleChatroom} className="card-link">
           글쓴이와 채팅하기
         </Link>
       </div>
@@ -54,6 +58,7 @@ function Card({ item, userUid }) {
 
 function Homepage({ userText }) {
   const [userUid, setUserUid] = useState(null);
+  let navigate = useNavigate();
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -68,7 +73,7 @@ function Homepage({ userText }) {
       {userText.map((item, index) => {
         return (
           <li key={index}>
-            <Card item={item} userUid={userUid} />
+            <Card item={item} userUid={userUid} navigate={navigate} />
           </li>
         );
       })}

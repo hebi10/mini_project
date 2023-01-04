@@ -54,7 +54,6 @@ function Navber() {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log(user);
         setUserName(user.displayName);
         setUserUid(user.uid);
         setLogin(true);
@@ -68,7 +67,6 @@ function Navber() {
       await alert("로그아웃이 완료되었습니다.");
       await window.location.reload(true);
     } else {
-      alert("로그인 후 이용 바랍니다.");
       await window.location.reload(true);
     }
   };

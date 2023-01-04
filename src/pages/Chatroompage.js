@@ -75,8 +75,8 @@ const Text = styled.p`
   text-align: center;
 `;
 
-function Chatroom() {
-  const [userUid, setUserUid] = useState(null);
+function Chatroom({ myUid }) {
+  const [userUid, setUserUid] = useState(myUid);
   const [userName, setUserName] = useState("게스트");
   const [target, setTarget] = useState("");
   const [chat, setChat] = useState("");
@@ -88,7 +88,6 @@ function Chatroom() {
   const chatBoxRef = useRef();
 
   useEffect(() => {
-    console.log("무한 반복 확인");
     loginUid();
     listUpdate();
     userRoomName();
@@ -219,13 +218,8 @@ function Chatroom() {
         let list = [];
 
         result.forEach((a) => {
-          let listFilter;
-          listFilter = chatList.some((list) => {
-            return a.data().uid === userName;
-          });
-          list.push({ data: a.data(), myChat: listFilter });
+          list.push({ data: a.data(), myChat: a.data().uid === userUid });
         });
-        console.log(list);
         setChatList(list);
       });
   };
@@ -234,7 +228,7 @@ function Chatroom() {
     <>
       <H2>{target}님과의 채팅방</H2>
       <Text>
-        정렬에 오류가 있습니다.
+        정렬에 오류가 있을시
         <br /> 채팅방을 한번 클릭하면 정렬이 됩니다.
       </Text>
       <Room>
