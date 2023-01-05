@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import styled from "styled-components";
 import { useState } from "react";
 import { useEffect } from "react";
+import useLoginInfo from "../customHook/useLoginInfo";
 
 const Span = styled.span`
   float: right;
@@ -46,20 +47,8 @@ const Span = styled.span`
 `;
 
 function Navber() {
-  const [userName, setUserName] = useState("게스트");
-  const [userUid, setUserUid] = useState(null);
-  const [login, setLogin] = useState(false);
+  const [userUid, userName, login] = useLoginInfo();
   let navigate = useNavigate();
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.displayName);
-        setUserUid(user.uid);
-        setLogin(true);
-      }
-    });
-  }, []);
 
   const logOut = async () => {
     if (login) {

@@ -8,6 +8,7 @@ import {
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
+import useLoginInfo from "../customHook/useLoginInfo";
 
 const Btn01 = styled.button`
   width: 49%;
@@ -40,29 +41,19 @@ const Footer = styled.footer`
 `;
 
 function Loginpage() {
+  const [userUid, userName, login] = useLoginInfo();
   const [user, setUser] = useState({
     email: "",
     pw: "",
   });
-  const [login, setLogin] = useState(false);
   let navigate = useNavigate();
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setLogin(true);
-      }
-    });
-  }, []);
-
   const signClick = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        alert("로그인이 되어있습니다! 로그아웃 이후 사용 가능합니다.");
-      } else {
-        navigate("/sign");
-      }
-    });
+    if (login) {
+      alert("로그인이 되어있습니다! 로그아웃 이후 사용 가능합니다.");
+    } else {
+      navigate("/sign");
+    }
   };
 
   const loginClick = async () => {

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { db } from "../data/userData";
 import firebase from "firebase/app";
 import { Button } from "react-bootstrap";
+import useLoginInfo from "../customHook/useLoginInfo";
 
 const cardStyle = {
   display: "width: 18rem",
@@ -24,24 +25,22 @@ const H5 = styled.h5`
   font-size: 1.1rem;
 `;
 
-function Card({ item, userUid, navigate }) {
+function Card({ item, userUid, navigate, login }) {
   const handleChatroom = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        let data = {
-          who: [userUid, item.uid],
-          user: item.userName,
-          userUid: item.uid,
-          date: new Date(),
-        };
+    if (login) {
+      let data = {
+        who: [userUid, item.uid],
+        user: item.userName,
+        userUid: item.uid,
+        date: new Date(),
+      };
 
-        db.collection("chatroom").doc(item.uid).set(data);
+      db.collection("chatroom").doc(item.uid).set(data);
 
-        navigate(`/chatroom/${item.uid}`);
-      } else {
-        alert("로그인 후 이용 가능합니다.");
-      }
-    });
+      navigate(`/chatroom/${item.uid}`);
+    } else {
+      alert("로그인 후 이용 가능합니다.");
+    }
   };
 
   return (
@@ -57,7 +56,7 @@ function Card({ item, userUid, navigate }) {
         </Link>
         <br />
         <Link onClick={handleChatroom} className="card-link">
-          {item.userName}님 오픈채팅방 으로 이동하기
+          {item.userName}님 오픈채팅방
         </Link>
       </div>
     </div>
@@ -65,16 +64,8 @@ function Card({ item, userUid, navigate }) {
 }
 
 function Homepage({ userText }) {
-  const [userUid, setUserUid] = useState(null);
+  const [userUid, userName, login] = useLoginInfo();
   let navigate = useNavigate();
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserUid(user.uid);
-      }
-    });
-  }, []);
 
   return (
     <>
@@ -93,7 +84,12 @@ function Homepage({ userText }) {
         {userText.map((item, index) => {
           return (
             <li key={index}>
-              <Card item={item} userUid={userUid} navigate={navigate} />
+              <Card
+                item={item}
+                userUid={userUid}
+                navigate={navigate}
+                login={login}
+              />
             </li>
           );
         })}

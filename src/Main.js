@@ -12,6 +12,7 @@ import Signuppage from "./pages/Signuppage";
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import Chatroom from "./pages/Chatroompage";
+import useLoginInfo from "./customHook/useLoginInfo";
 
 const GlobalStyle = createGlobalStyle`
   #root > .container {
@@ -83,8 +84,8 @@ const Div = styled.div`
 `;
 
 function Main() {
+  const [userUid] = useLoginInfo();
   const [userText, setUserText] = useState([]);
-  const [userUid, setUserUid] = useState(null);
 
   useEffect(() => {
     (async function () {
@@ -92,12 +93,6 @@ function Main() {
       await setUserText(dataLoad());
     })();
   }, []);
-
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      setUserUid(user.uid);
-    }
-  });
 
   return (
     <HashRouter>

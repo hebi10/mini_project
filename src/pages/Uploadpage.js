@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { db } from "../data/userData";
-import firebase from "firebase/app";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import useLoginInfo from "../customHook/useLoginInfo";
 
 const url = {
   img01:
@@ -72,8 +72,7 @@ const InputBox = styled.div`
 let today = new Date();
 
 function Upload() {
-  let userName = useRef("게스트");
-  let userUid = useRef(null);
+  const [userUid, userName] = useLoginInfo();
   let navigate = useNavigate();
   const [data, setData] = useState({
     title: "",
@@ -86,13 +85,6 @@ function Upload() {
       .${today.getDate()}
       .${today.toLocaleTimeString("ko-kr")}
       `,
-  });
-
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      userName = user.displayName;
-      userUid = user.uid;
-    }
   });
 
   const handleChange = (e) => {

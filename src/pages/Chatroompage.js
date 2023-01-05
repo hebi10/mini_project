@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 import { db } from "../data/userData";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import useLoginInfo from "../customHook/useLoginInfo";
 
 const Room = styled.div`
   padding: 0;
@@ -76,8 +77,7 @@ const Text = styled.p`
 `;
 
 function Chatroom({ myUid }) {
-  const [userUid, setUserUid] = useState(myUid);
-  const [userName, setUserName] = useState("게스트");
+  const [userUid, userName] = useLoginInfo();
   const [target, setTarget] = useState("");
   const [chat, setChat] = useState("");
   const [chatList, setChatList] = useState([]);
@@ -88,7 +88,6 @@ function Chatroom({ myUid }) {
   const chatBoxRef = useRef();
 
   useEffect(() => {
-    loginUid();
     listUpdate();
     userRoomName();
     chatListUpdate();
@@ -99,15 +98,6 @@ function Chatroom({ myUid }) {
   useEffect(() => {
     chatScroll();
   }, [userList]);
-
-  const loginUid = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserUid(user.uid);
-        setUserName(user.displayName);
-      }
-    });
-  };
 
   const chatScroll = () => {
     let clientHeight = chatBoxRef.current.clientHeight;
