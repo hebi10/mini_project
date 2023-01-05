@@ -1,9 +1,6 @@
-import { useEffect } from "react";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { db } from "../data/userData";
-import firebase from "firebase/app";
 import { Button } from "react-bootstrap";
 import useLoginInfo from "../customHook/useLoginInfo";
 

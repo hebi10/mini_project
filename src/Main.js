@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { userDataLoad, dataLoad } from "./data/userData";
-import firebase from "firebase/app";
 import App from "./components/App";
 import Detailpage from "./pages/Detailpage";
 import Homepage from "./pages/Homepage";
